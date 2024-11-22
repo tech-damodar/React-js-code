@@ -1,0 +1,12 @@
+.mobile{
+  background-color: rgb(141, 232, 232);
+  padding: 20px;
+  margin: 20;
+  width: fit-content;
+  border-radius: 10px;
+}
+.list{
+  display: flex;
+  justify-content: center;
+  gap: 2%;
+}

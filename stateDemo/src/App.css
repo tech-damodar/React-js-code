@@ -1,0 +1,15 @@
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+.state{
+  width: 30%;
+  margin: 30px auto;
+  background-color: aquamarine;
+  display: flex;
+  flex-direction: column;
+  font-size: 20px;
+  justify-content: center;
+  align-items: center;
+}

@@ -1,0 +1,12 @@
+.user{
+    width: fit-content;
+    background-color: rgb(66, 225, 156);
+    padding: 10px 20px;
+    margin: 20px;
+    border-radius: 10px;
+    text-align: center;
+}
+.userList{
+    display: flex;
+    justify-content: center;
+}
