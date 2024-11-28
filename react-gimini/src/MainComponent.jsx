@@ -5,19 +5,54 @@ import MainContainer from "./MainContainer";
 
 
 const MainComponent = () => {
-//   const [searchData, setSearchData] = useState("");
-//   const [result, setResult] = useState(null);
-//   const [loading,setLoading] = useState(true);
-  const [clicked,setClicked] = useState(true)
-//   const [showQues,setShowQues] = useState(searchData)
+  const [searchData, setSearchData] = useState("");
+  const [result, setResult] = useState(null);
+  const [loading,setLoading] = useState(true);
+  const [clicked,setClicked] = useState(false)
+  const [showQues,setShowQues] = useState(searchData)
   
 //   const {history,setHistory} = useContext(searchContext); 
 
 
-  // function inputHandle(event) {
-  //   setSearchData(event.target.value);
+  function inputHandle(event) {
+    setSearchData(event.target.value);
     
-  // }
+  }
+  function submitHandle(){
+    setClicked(true)
+    setShowQues(searchData)
+    fetch("https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=AIzaSyAApxq-JGj6ZrguhuEpRUZePtO2EIB3FYI"
+      , {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        "contents": [{ "parts": [{ "text": searchData }] }]
+      })
+    }).then((response) => {
+      return response.json();
+    }).then((data)=>{
+      setLoading(false)
+      let responce = data.candidates[0].content.parts[0].text;
+      // let responce = data.candidates[0].content.parts[0].text;
+      const lines = responce.split("**");
+      let newResponce = ""; // Initialize properly
+
+      for (let i = 0; i < lines.length; i++) {
+        if (i % 2 === 0) {
+          newResponce += lines[i]; // Non-bold text
+        } else {
+          newResponce += "<b>" + lines[i] + "</b>"; // Bold text
+        }
+      }
+      let newResponce2 = newResponce.split("*").join("</br>")
+      setResult(newResponce2); // Set the processed response
+      setSearchData("")
+
+      
+    })
+  }
 
 
 
@@ -29,16 +64,35 @@ const MainComponent = () => {
       </div>
       {/* Center of body where we display the output */}
      
-        <MainContainer/> 
+       { 
+        clicked == false ? <MainContainer/> : 
+        <div className="result">
+          <div className="question"><img src={assets.user_icon} className="icon" alt="User Icon" />{showQues}</div>
+            <div className="result-data">
+            {
+              loading?
+              <div className="loading">
+                <hr />
+                <hr />
+                <hr />
+              </div>:
+                <div dangerouslySetInnerHTML={{ __html: result }} className="p"/>
+              }
+            
+            </div>
+          </div>
+
+       
+      }
          
       {/* Bottom search box */}
       <div className="buttom">
         <div className="search-box">
-          <input type="text"   placeholder="Enter a prompt here" />
+          <input type="text" onChange={inputHandle}  placeholder="Enter a prompt here" />
           <div>
             <img src={assets.gallery_icon} alt="Gallery Icon" />
             <img src={assets.mic_icon} alt="Mic Icon" />
-            <img src={assets.send_icon}  alt="Send Icon" />
+            <img src={assets.send_icon} onClick={submitHandle} alt="Send Icon" />
           </div>
         </div>
         <p className="buttom-txt">

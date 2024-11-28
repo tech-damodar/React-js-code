@@ -1,10 +1,9 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import "./MainComponent.css"
 import { assets } from "./assets/assets";
 const MainContainer = () => {
 
-    
-
+   
   return (
     <>
     <div className="main-container">
